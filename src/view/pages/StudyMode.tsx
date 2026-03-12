@@ -69,7 +69,7 @@ export function StudyMode() {
   const currentCard = studyCards[currentIndex];
   const isLastCard = currentIndex === studyCards.length - 1;
 
-  // Get user's custom intervals or defaults
+  // Get user's custom intervals or defaults - must be at component scope for JSX access
   const intervals = settings.intervals || DEFAULT_INTERVALS;
 
   // Auto-recognition

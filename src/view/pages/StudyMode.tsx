@@ -69,6 +69,9 @@ export function StudyMode() {
   const currentCard = studyCards[currentIndex];
   const isLastCard = currentIndex === studyCards.length - 1;
 
+  // Get user's custom intervals or defaults
+  const intervals = settings.intervals || DEFAULT_INTERVALS;
+
   // Auto-recognition
   useEffect(() => {
     if (settings.autoRecognition && userAnswer.trim() && currentCard) {
@@ -90,8 +93,6 @@ export function StudyMode() {
   const handleDifficulty = (difficulty: Difficulty) => {
     if (!currentCard) return;
 
-    // Use user's custom intervals or defaults
-    const intervals = settings.intervals || DEFAULT_INTERVALS;
     const updates = calculateNextReview(currentCard, difficulty, intervals);
     updateCard(currentCard.id, updates);
 

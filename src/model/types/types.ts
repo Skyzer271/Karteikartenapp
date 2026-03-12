@@ -33,11 +33,10 @@ export interface StudySession {
 }
 
 export interface LearningIntervals {
-  again: number;      // Tage nach "Nochmal"
-  hard: number;       // Multiplikator für "Schwer"
-  good: number;       // Multiplikator für "Gut"
-  easy: number;       // Multiplikator für "Einfach"
-  easyBonus: number;  // Extra-Bonus für "Einfach"
+  again: number;      // Tage nach "Nochmal" (1-7)
+  hard: number;       // Tage für "Schwer" (0-7)
+  good: number;       // Tage für "Gut" (4-14)
+  easy: number;       // Tage für "Einfach" (7-28)
 }
 
 export interface Settings {

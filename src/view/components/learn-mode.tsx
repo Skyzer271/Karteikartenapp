@@ -5,7 +5,7 @@ import { Button } from '@/view/ui/button';
 import { Card, CardContent } from '@/view/ui/card';
 import { Progress } from '@/view/ui/progress';
 import { useSettings } from '@/controller/hooks/useSettings';
-import { calculateNextReview, DEFAULT_INTERVALS } from '@/model/services/spaced-repetition';
+import { calculateNextReview, DEFAULT_INTERVALS, formatDays } from '@/model/services/spaced-repetition';
 import type { Deck, Card as FlashCard, Difficulty } from '@/model/types/types';
 
 interface LearnModeProps {
@@ -178,11 +178,7 @@ export function LearnMode({ deck, cards, onExit, onUpdateCard, onCardReviewed }:
   // Calculate next review date for display
   const getNextReviewLabel = (difficulty: Difficulty): string => {
     const result = calculateNextReview(currentCard, difficulty, intervals);
-    const days = result.interval;
-    if (days === 1) return 'Morgen';
-    if (days < 30) return `${days} Tage`;
-    const months = Math.round(days / 30);
-    return `${months} Monat${months > 1 ? 'e' : ''}`;
+    return formatDays(result.interval);
   };
 
   const handleRating = (rating: 'hard' | 'medium' | 'easy') => {

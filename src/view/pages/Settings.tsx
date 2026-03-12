@@ -5,7 +5,7 @@ import { useSettings } from '@/controller/hooks/useSettings';
 import { useTheme } from '@/controller/contexts/ThemeContext';
 import { Button } from '@/view/components/Button';
 import { Card } from '@/view/components/Card';
-import { DEFAULT_INTERVALS, INTERVAL_PRESETS } from '@/model/services/spaced-repetition';
+import { DEFAULT_INTERVALS, INTERVAL_PRESETS, formatDays } from '@/model/services/spaced-repetition';
 import type { LearningIntervals } from '@/model/types/types';
 
 export function Settings() {
@@ -36,6 +36,9 @@ export function Settings() {
   const resetIntervals = () => {
     updateSettings({ intervals: DEFAULT_INTERVALS });
   };
+
+  // Get current intervals or defaults
+  const currentIntervals = settings.intervals || DEFAULT_INTERVALS;
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -125,7 +128,7 @@ export function Settings() {
             </div>
 
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-              Passen Sie die Zeitintervalle zwischen den Wiederholungen an Ihr Lerntempo an.
+              Legen Sie fest, wie viele Tage vergehen sollen, bis eine Karte wieder angezeigt wird.
             </p>
 
             {/* Presets */}
@@ -143,125 +146,117 @@ export function Settings() {
             </div>
 
             {/* Custom Intervals */}
-            <div className="space-y-4">
+            <div className="space-y-6">
               {/* Again Interval */}
               <div className="py-3 border-b border-gray-200 dark:border-gray-700">
-                <div className="flex justify-between items-center mb-2">
+                <div className="flex justify-between items-center mb-3">
                   <div>
-                    <p className="text-gray-900 dark:text-gray-100">"Nochmal" - Intervall</p>
+                    <p className="text-gray-900 dark:text-gray-100 font-medium">❌ "Nochmal" - Wartezeit</p>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
                       Tage bis zur nächsten Wiederholung nach einer falschen Antwort
                     </p>
                   </div>
-                  <span className="text-lg font-semibold text-blue-600">
-                    {settings.intervals?.again ?? DEFAULT_INTERVALS.again} Tag(e)
+                  <span className="text-xl font-bold text-blue-600">
+                    {formatDays(currentIntervals.again)}
                   </span>
                 </div>
-                <input
-                  type="range"
-                  min="1"
-                  max="7"
-                  step="1"
-                  value={settings.intervals?.again ?? DEFAULT_INTERVALS.again}
-                  onChange={(e) => handleIntervalChange('again', parseInt(e.target.value))}
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                />
+                <div className="flex items-center gap-3">
+                  <span className="text-xs text-gray-500 w-8">1d</span>
+                  <input
+                    type="range"
+                    min="1"
+                    max="7"
+                    step="1"
+                    value={currentIntervals.again}
+                    onChange={(e) => handleIntervalChange('again', parseInt(e.target.value))}
+                    className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                  />
+                  <span className="text-xs text-gray-500 w-8">7d</span>
+                </div>
               </div>
 
-              {/* Hard Multiplier */}
+              {/* Hard Interval */}
               <div className="py-3 border-b border-gray-200 dark:border-gray-700">
-                <div className="flex justify-between items-center mb-2">
+                <div className="flex justify-between items-center mb-3">
                   <div>
-                    <p className="text-gray-900 dark:text-gray-100">"Schwer" - Multiplikator</p>
+                    <p className="text-gray-900 dark:text-gray-100 font-medium">😕 "Schwer" - Intervall</p>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Verlängerungsfaktor für schwer gewusste Karten
+                      Wartezeit wenn Sie die Antwort schwer fanden
                     </p>
                   </div>
-                  <span className="text-lg font-semibold text-blue-600">
-                    {settings.intervals?.hard ?? DEFAULT_INTERVALS.hard}x
+                  <span className="text-xl font-bold text-orange-600">
+                    {formatDays(currentIntervals.hard)}
                   </span>
                 </div>
-                <input
-                  type="range"
-                  min="1.0"
-                  max="2.0"
-                  step="0.1"
-                  value={settings.intervals?.hard ?? DEFAULT_INTERVALS.hard}
-                  onChange={(e) => handleIntervalChange('hard', parseFloat(e.target.value))}
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                />
+                <div className="flex items-center gap-3">
+                  <span className="text-xs text-gray-500 w-8">0d</span>
+                  <input
+                    type="range"
+                    min="0"
+                    max="7"
+                    step="1"
+                    value={currentIntervals.hard}
+                    onChange={(e) => handleIntervalChange('hard', parseInt(e.target.value))}
+                    className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-orange-500"
+                  />
+                  <span className="text-xs text-gray-500 w-8">7d</span>
+                </div>
               </div>
 
-              {/* Good Multiplier */}
+              {/* Good Interval */}
               <div className="py-3 border-b border-gray-200 dark:border-gray-700">
-                <div className="flex justify-between items-center mb-2">
+                <div className="flex justify-between items-center mb-3">
                   <div>
-                    <p className="text-gray-900 dark:text-gray-100">"Gut" - Multiplikator</p>
+                    <p className="text-gray-900 dark:text-gray-100 font-medium">🙂 "Gut" - Intervall</p>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Standard-Verlängerungsfaktor (&lt; 1 = häufiger, &gt; 1 = seltener)
+                      Wartezeit bei einer guten Antwort
                     </p>
                   </div>
-                  <span className="text-lg font-semibold text-blue-600">
-                    {settings.intervals?.good ?? DEFAULT_INTERVALS.good}x
+                  <span className="text-xl font-bold text-yellow-600">
+                    {formatDays(currentIntervals.good)}
                   </span>
                 </div>
-                <input
-                  type="range"
-                  min="0.5"
-                  max="1.5"
-                  step="0.1"
-                  value={settings.intervals?.good ?? DEFAULT_INTERVALS.good}
-                  onChange={(e) => handleIntervalChange('good', parseFloat(e.target.value))}
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                />
-              </div>
-
-              {/* Easy Multiplier */}
-              <div className="py-3 border-b border-gray-200 dark:border-gray-700">
-                <div className="flex justify-between items-center mb-2">
-                  <div>
-                    <p className="text-gray-900 dark:text-gray-100">"Einfach" - Multiplikator</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Bonus-Faktor für einfach gewusste Karten
-                    </p>
-                  </div>
-                  <span className="text-lg font-semibold text-blue-600">
-                    {settings.intervals?.easy ?? DEFAULT_INTERVALS.easy}x
-                  </span>
+                <div className="flex items-center gap-3">
+                  <span className="text-xs text-gray-500 w-8">4d</span>
+                  <input
+                    type="range"
+                    min="4"
+                    max="14"
+                    step="1"
+                    value={currentIntervals.good}
+                    onChange={(e) => handleIntervalChange('good', parseInt(e.target.value))}
+                    className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-yellow-500"
+                  />
+                  <span className="text-xs text-gray-500 w-8">14d</span>
                 </div>
-                <input
-                  type="range"
-                  min="1.0"
-                  max="2.0"
-                  step="0.1"
-                  value={settings.intervals?.easy ?? DEFAULT_INTERVALS.easy}
-                  onChange={(e) => handleIntervalChange('easy', parseFloat(e.target.value))}
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                />
               </div>
 
-              {/* Easy Bonus */}
+              {/* Easy Interval */}
               <div className="py-3">
-                <div className="flex justify-between items-center mb-2">
+                <div className="flex justify-between items-center mb-3">
                   <div>
-                    <p className="text-gray-900 dark:text-gray-100">"Einfach" - Ease-Bonus</p>
+                    <p className="text-gray-900 dark:text-gray-100 font-medium">😄 "Einfach" - Intervall</p>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Wie stark die Karte als "leichter" markiert wird
+                      Wartezeit bei einer sehr einfachen Antwort
                     </p>
                   </div>
-                  <span className="text-lg font-semibold text-blue-600">
-                    +{settings.intervals?.easyBonus ?? DEFAULT_INTERVALS.easyBonus}
+                  <span className="text-xl font-bold text-green-600">
+                    {formatDays(currentIntervals.easy)}
                   </span>
                 </div>
-                <input
-                  type="range"
-                  min="0.05"
-                  max="0.25"
-                  step="0.05"
-                  value={settings.intervals?.easyBonus ?? DEFAULT_INTERVALS.easyBonus}
-                  onChange={(e) => handleIntervalChange('easyBonus', parseFloat(e.target.value))}
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                />
+                <div className="flex items-center gap-3">
+                  <span className="text-xs text-gray-500 w-8">7d</span>
+                  <input
+                    type="range"
+                    min="7"
+                    max="28"
+                    step="1"
+                    value={currentIntervals.easy}
+                    onChange={(e) => handleIntervalChange('easy', parseInt(e.target.value))}
+                    className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-green-500"
+                  />
+                  <span className="text-xs text-gray-500 w-8">28d</span>
+                </div>
               </div>
             </div>
           </Card>

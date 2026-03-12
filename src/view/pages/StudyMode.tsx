@@ -6,7 +6,7 @@ import { useSettings } from '@/controller/hooks/useSettings';
 import { Button } from '@/view/components/Button';
 import { FlashCard } from '@/view/components/FlashCard';
 import { indexedDBStorage } from '@/model/storage/indexedDB';
-import { calculateNextReview, getDueCards, shuffleArray, DEFAULT_INTERVALS } from '@/model/services/spaced-repetition';
+import { calculateNextReview, getDueCards, shuffleArray, DEFAULT_INTERVALS, formatDays } from '@/model/services/spaced-repetition';
 import { motion, AnimatePresence } from 'motion/react';
 import type { Card as CardType, Difficulty } from '@/model/types/types';
 
@@ -290,7 +290,7 @@ export function StudyMode() {
                 >
                   <RotateCcw className="w-5 h-5 mb-1" />
                   <span>Nochmal</span>
-                  <span className="text-xs opacity-75">1 Tag</span>
+                  <span className="text-xs opacity-75">{formatDays(intervals.again)}</span>
                 </Button>
                 <Button
                   variant="secondary"
@@ -299,7 +299,7 @@ export function StudyMode() {
                 >
                   <span className="text-xl mb-1">😕</span>
                   <span>Schwer</span>
-                  <span className="text-xs opacity-75">{Math.floor(currentCard.interval * 1.2)}d</span>
+                  <span className="text-xs opacity-75">{formatDays(intervals.hard)}</span>
                 </Button>
                 <Button
                   variant="primary"
@@ -308,13 +308,7 @@ export function StudyMode() {
                 >
                   <span className="text-xl mb-1">🙂</span>
                   <span>Gut</span>
-                  <span className="text-xs opacity-75">
-                    {currentCard.repetitions === 0
-                      ? '1d'
-                      : currentCard.repetitions === 1
-                      ? '6d'
-                      : `${Math.round(currentCard.interval * currentCard.easeFactor)}d`}
-                  </span>
+                  <span className="text-xs opacity-75">{formatDays(intervals.good)}</span>
                 </Button>
                 <Button
                   variant="primary"
@@ -323,13 +317,7 @@ export function StudyMode() {
                 >
                   <span className="text-xl mb-1">😄</span>
                   <span>Einfach</span>
-                  <span className="text-xs opacity-75">
-                    {currentCard.repetitions === 0
-                      ? '4d'
-                      : currentCard.repetitions === 1
-                      ? '10d'
-                      : `${Math.round(currentCard.interval * currentCard.easeFactor * 1.3)}d`}
-                  </span>
+                  <span className="text-xs opacity-75">{formatDays(intervals.easy)}</span>
                 </Button>
               </div>
             </div>

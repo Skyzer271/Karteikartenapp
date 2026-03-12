@@ -1,24 +1,23 @@
 import type { Card, Difficulty, LearningIntervals } from '../types/types';
 
 /**
- * Spaced Repetition Algorithm (SM-2) with Customizable Intervals
- * Based on SuperMemo 2 algorithm, adapted for user-defined learning pace
+ * Spaced Repetition Algorithm with Customizable Day Intervals
+ * Users can set exact days for each difficulty level
  */
 
 // Default intervals for new users
 export const DEFAULT_INTERVALS: LearningIntervals = {
-  again: 1,      // 1 day after "Again"
-  hard: 1.2,     // 1.2x multiplier for "Hard"
-  good: 1.0,     // Standard progression for "Good"
-  easy: 1.3,     // 1.3x multiplier for "Easy"
-  easyBonus: 0.15, // Ease factor increase for "Easy"
+  again: 1,   // 1 day after "Again"
+  hard: 1,    // 1 day for "Hard"
+  good: 6,    // 6 days for "Good"
+  easy: 10,   // 10 days for "Easy"
 };
 
 /**
- * Calculate next review date based on difficulty and user-defined intervals
+ * Calculate next review date based on difficulty and user-defined day intervals
  * @param card - The flashcard to update
  * @param difficulty - User's rating of how well they knew the card
- * @param intervals - User's custom interval settings
+ * @param intervals - User's custom interval settings (in days)
  * @returns Partial card object with updated review data
  */
 export function calculateNextReview(
@@ -38,34 +37,22 @@ export function calculateNextReview(
       break;
 
     case 'hard':
-      // Hard - use user's hard multiplier (default: 1.2x)
-      interval = Math.max(1, Math.floor(interval * intervals.hard));
+      // Hard - use user's hard interval directly (0-7 days)
+      interval = intervals.hard;
       easeFactor = Math.max(1.3, easeFactor - 0.15);
       repetitions += 1;
       break;
 
     case 'good':
-      // Normal progression - standard SM-2 with user's good setting
-      if (repetitions === 0) {
-        interval = 1;
-      } else if (repetitions === 1) {
-        interval = 6;
-      } else {
-        interval = Math.round(interval * easeFactor * intervals.good);
-      }
+      // Good - use user's good interval directly (4-14 days)
+      interval = intervals.good;
       repetitions += 1;
       break;
 
     case 'easy':
-      // Easy - apply user's easy multiplier (default: 1.3x) and bonus
-      if (repetitions === 0) {
-        interval = 4;
-      } else if (repetitions === 1) {
-        interval = 10;
-      } else {
-        interval = Math.round(interval * easeFactor * intervals.easy);
-      }
-      easeFactor = Math.min(2.5, easeFactor + intervals.easyBonus);
+      // Easy - use user's easy interval directly (7-28 days)
+      interval = intervals.easy;
+      easeFactor = Math.min(2.5, easeFactor + 0.15);
       repetitions += 1;
       break;
   }
@@ -145,10 +132,9 @@ export const INTERVAL_PRESETS = {
     description: 'Längere Pausen zwischen den Wiederholungen',
     intervals: {
       again: 1,
-      hard: 1.1,
-      good: 1.2,
-      easy: 1.5,
-      easyBonus: 0.2,
+      hard: 2,
+      good: 10,
+      easy: 21,
     } as LearningIntervals,
   },
   standard: {
@@ -161,10 +147,24 @@ export const INTERVAL_PRESETS = {
     description: 'Kürzere Intervalle für schnelles Lernen',
     intervals: {
       again: 1,
-      hard: 1.3,
-      good: 0.9,
-      easy: 1.2,
-      easyBonus: 0.1,
+      hard: 0,
+      good: 4,
+      easy: 7,
     } as LearningIntervals,
   },
 };
+
+/**
+ * Format days into human-readable string
+ */
+export function formatDays(days: number): string {
+  if (days === 0) return 'Heute';
+  if (days === 1) return 'Morgen';
+  if (days < 7) return `${days} Tage`;
+  if (days === 7) return '1 Woche';
+  if (days < 14) return `${Math.floor(days / 7)} Wochen`;
+  if (days === 14) return '2 Wochen';
+  if (days < 28) return `${Math.floor(days / 7)} Wochen`;
+  if (days === 28) return '4 Wochen';
+  return `${Math.floor(days / 7)} Wochen`;
+}

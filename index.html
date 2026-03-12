@@ -9,18 +9,30 @@
     <!-- GitHub Pages SPA Redirect Script -->
     <script type="text/javascript">
       // Single Page Apps for GitHub Pages
-      // MIT License
-      // https://github.com/rafgraph/spa-github-pages
-      (function(l) {
-        if (l.search[1] === '/' ) {
-          var decoded = l.search.slice(1).split('&').map(function(s) { 
-            return s.replace(/~and~/g, '&')
-          }).join('?');
-          window.history.replaceState(null, null,
-              l.pathname.slice(0, -1) + decoded + l.hash
-          );
+      // This script handles routing for SPAs on GitHub Pages
+      (function() {
+        // Get the current path
+        var path = window.location.pathname;
+        var repo = '/Karteikartenapp';
+        
+        // Check if we're on GitHub Pages and not at the root
+        if (path.indexOf(repo) === 0 && path !== repo + '/' && !path.match(/\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$/)) {
+          // Save the current path to sessionStorage
+          sessionStorage.setItem('spa-redirect', path + window.location.search + window.location.hash);
+          // Redirect to the root
+          window.location.replace(repo + '/');
         }
-      }(window.location))
+        
+        // Check if we have a saved redirect
+        var redirect = sessionStorage.getItem('spa-redirect');
+        if (redirect) {
+          sessionStorage.removeItem('spa-redirect');
+          // Use history API to restore the original URL
+          if (window.history && window.history.replaceState) {
+            window.history.replaceState(null, null, redirect);
+          }
+        }
+      })();
     </script>
     
     <!-- Theme Detection - Prevent Flash -->
@@ -36,6 +48,6 @@
 
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <script type="module" src="./src/main.tsx"></script>
   </body>
 </html>

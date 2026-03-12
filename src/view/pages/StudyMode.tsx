@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router';
-import { ArrowLeft, Lightbulb, RotateCcw, CheckCircle } from 'lucide-react';
+import { ArrowLeft, Lightbulb, RotateCcw, CheckCircle, Eye } from 'lucide-react';
 import { useDecks } from '@/controller/hooks/useDecks';
 import { useSettings } from '@/controller/hooks/useSettings';
 import { Button } from '@/view/components/Button';
@@ -35,7 +35,7 @@ export function StudyMode() {
 
   const [studyCards, setStudyCards] = useState<CardType[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isFlipped, setIsFlipped] = useState(false);
+  const [isRevealed, setIsRevealed] = useState(false);
   const [showHint, setShowHint] = useState(false);
   const [userAnswer, setUserAnswer] = useState('');
   const [isAnswerCorrect, setIsAnswerCorrect] = useState<boolean | null>(null);
@@ -72,10 +72,10 @@ export function StudyMode() {
   // Get user's custom intervals or defaults - must be at component scope for JSX access
   const intervals = settings.intervals || DEFAULT_INTERVALS;
 
-  // Auto-recognition
-  useEffect(() => {
-    if (settings.autoRecognition && userAnswer.trim() && currentCard) {
-      // If showing front first, user should answer with back (and vice versa)
+  // Handle revealing the solution
+  const handleRevealSolution = () => {
+    // Compare answer when revealing (if user entered something)
+    if (userAnswer.trim() && currentCard) {
       const cardToCompare = (currentCard as any)._showFrontFirst
         ? currentCard.back
         : currentCard.front;
@@ -84,10 +84,8 @@ export function StudyMode() {
         userAnswer.trim().toLowerCase() === cardToCompare.trim().toLowerCase();
       setIsAnswerCorrect(isCorrect);
     }
-  }, [userAnswer, currentCard, settings.autoRecognition]);
-
-  const handleFlip = () => {
-    setIsFlipped(true);
+    
+    setIsRevealed(true);
   };
 
   const handleDifficulty = (difficulty: Difficulty) => {
@@ -113,7 +111,7 @@ export function StudyMode() {
   };
 
   const resetCardState = () => {
-    setIsFlipped(false);
+    setIsRevealed(false);
     setShowHint(false);
     setUserAnswer('');
     setIsAnswerCorrect(null);
@@ -204,7 +202,7 @@ export function StudyMode() {
           </div>
         </div>
 
-        {/* Card */}
+        {/* Question Card (Front Side) - Always shown first */}
         <AnimatePresence mode="wait">
           <motion.div
             key={currentCard.id}
@@ -213,41 +211,96 @@ export function StudyMode() {
             exit={{ opacity: 0, x: -50 }}
             transition={{ duration: 0.3 }}
           >
-            <FlashCard
-              card={displayCard}
-              showBack={isFlipped}
-              onFlip={handleFlip}
-              fontSize={settings.fontSize}
-            />
+            <div className="max-w-2xl mx-auto">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 md:p-12 min-h-[300px] flex flex-col items-center justify-center text-center">
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 uppercase tracking-wide">
+                  Frage
+                </p>
+                <p className={`text-2xl md:text-3xl font-medium text-gray-900 dark:text-gray-100 ${
+                  settings.fontSize === 'small' ? 'text-xl' : settings.fontSize === 'large' ? 'text-4xl' : 'text-2xl'
+                }`}>
+                  {displayCard.back}
+                </p>
+              </div>
+            </div>
           </motion.div>
         </AnimatePresence>
 
-        {/* Answer Input (Auto-recognition) */}
-        {settings.autoRecognition && !isFlipped && (
+        {/* Answer Input - Only shown before revealing */}
+        {!isRevealed && (
           <div className="mt-6 max-w-2xl mx-auto">
-            <div className="relative">
-              <input
-                type="text"
-                value={userAnswer}
-                onChange={(e) => setUserAnswer(e.target.value)}
-                placeholder="Ihre Antwort eingeben..."
-                className="w-full px-4 py-3 rounded-xl border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-              />
-              {isAnswerCorrect !== null && (
-                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                  {isAnswerCorrect ? (
-                    <span className="text-2xl">✅</span>
-                  ) : (
-                    <span className="text-2xl">❌</span>
-                  )}
-                </div>
-              )}
-            </div>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2 text-center">
+              Gib deine Antwort ein (optional):
+            </p>
+            <input
+              type="text"
+              value={userAnswer}
+              onChange={(e) => setUserAnswer(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && userAnswer.trim()) {
+                  handleRevealSolution();
+                }
+              }}
+              placeholder="Deine Antwort..."
+              className="w-full px-4 py-3 rounded-xl border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-center text-lg"
+              autoFocus
+            />
           </div>
         )}
 
+        {/* Solution Card - Shown after revealing */}
+        {isRevealed && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="mt-6 max-w-2xl mx-auto"
+          >
+            <div className="bg-green-50 dark:bg-green-900/20 border-2 border-green-200 dark:border-green-800 rounded-2xl shadow-lg p-8 text-center">
+              <p className="text-sm text-green-600 dark:text-green-400 mb-2 uppercase tracking-wide">
+                Richtige Antwort
+              </p>
+              <p className={`text-2xl md:text-3xl font-medium text-green-900 dark:text-green-100 ${
+                settings.fontSize === 'small' ? 'text-xl' : settings.fontSize === 'large' ? 'text-4xl' : 'text-2xl'
+              }`}>
+                {displayCard.front}
+              </p>
+            </div>
+
+            {/* Answer Comparison */}
+            {userAnswer.trim() && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2 }}
+                className="mt-4"
+              >
+                <div className={`p-4 rounded-xl text-center ${
+                  isAnswerCorrect 
+                    ? 'bg-green-100 dark:bg-green-900/40 border border-green-300 dark:border-green-700'
+                    : 'bg-red-100 dark:bg-red-900/40 border border-red-300 dark:border-red-700'
+                }`}>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Deine Antwort:</p>
+                  <p className={`font-medium ${
+                    isAnswerCorrect 
+                      ? 'text-green-800 dark:text-green-200'
+                      : 'text-red-800 dark:text-red-200'
+                  }`}>
+                    {userAnswer}
+                  </p>
+                  {isAnswerCorrect ? (
+                    <p className="text-green-600 dark:text-green-400 text-sm mt-2">✓ Richtig!</p>
+                  ) : (
+                    <p className="text-red-600 dark:text-red-400 text-sm mt-2">✗ Falsch</p>
+                  )}
+                </div>
+              </motion.div>
+            )}
+          </motion.div>
+        )}
+
         {/* Hint Button */}
-        {settings.showHintButton && currentCard.hint && !showHint && !isFlipped && (
+        {settings.showHintButton && currentCard.hint && !showHint && !isRevealed && (
           <div className="mt-6 text-center">
             <Button variant="secondary" onClick={() => setShowHint(true)}>
               <Lightbulb className="w-5 h-5 mr-2" />
@@ -272,56 +325,65 @@ export function StudyMode() {
 
         {/* Action Buttons */}
         <div className="mt-8 max-w-2xl mx-auto">
-          {!isFlipped ? (
+          {!isRevealed ? (
             <div className="flex gap-3 justify-center">
-              <Button onClick={handleFlip} size="lg" className="flex-1 max-w-xs">
-                Karte umdrehen
+              <Button 
+                onClick={handleRevealSolution} 
+                size="lg" 
+                className="flex-1 max-w-xs bg-blue-600 hover:bg-blue-700"
+              >
+                <Eye className="w-5 h-5 mr-2" />
+                Lösung aufdecken
               </Button>
             </div>
           ) : (
-            <div className="space-y-3">
-              <p className="text-center text-sm text-gray-600 dark:text-gray-400 mb-4">
-                Wie gut kannten Sie die Antwort?
-              </p>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <Button
-                  variant="danger"
-                  onClick={() => handleDifficulty('again')}
-                  className="flex flex-col items-center py-4"
-                >
-                  <RotateCcw className="w-5 h-5 mb-1" />
-                  <span>Nochmal</span>
-                  <span className="text-xs opacity-75">{formatDays(intervals.again)}</span>
-                </Button>
-                <Button
-                  variant="secondary"
-                  onClick={() => handleDifficulty('hard')}
-                  className="flex flex-col items-center py-4"
-                >
-                  <span className="text-xl mb-1">😕</span>
-                  <span>Schwer</span>
-                  <span className="text-xs opacity-75">{formatDays(intervals.hard)}</span>
-                </Button>
-                <Button
-                  variant="primary"
-                  onClick={() => handleDifficulty('good')}
-                  className="flex flex-col items-center py-4"
-                >
-                  <span className="text-xl mb-1">🙂</span>
-                  <span>Gut</span>
-                  <span className="text-xs opacity-75">{formatDays(intervals.good)}</span>
-                </Button>
-                <Button
-                  variant="primary"
-                  onClick={() => handleDifficulty('easy')}
-                  className="flex flex-col items-center py-4"
-                >
-                  <span className="text-xl mb-1">😄</span>
-                  <span>Einfach</span>
-                  <span className="text-xs opacity-75">{formatDays(intervals.easy)}</span>
-                </Button>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="space-y-3">
+                <p className="text-center text-sm text-gray-600 dark:text-gray-400 mb-4">
+                  Wie gut kanntest du die Antwort?
+                </p>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  <Button
+                    variant="danger"
+                    onClick={() => handleDifficulty('again')}
+                    className="flex flex-col items-center py-4 bg-red-600 hover:bg-red-700"
+                  >
+                    <RotateCcw className="w-5 h-5 mb-1" />
+                    <span>Nochmal</span>
+                    <span className="text-xs opacity-75">{formatDays(intervals.again)}</span>
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    onClick={() => handleDifficulty('hard')}
+                    className="flex flex-col items-center py-4 bg-orange-500 hover:bg-orange-600 text-white"
+                  >
+                    <span className="text-xl mb-1">😕</span>
+                    <span>Schwer</span>
+                    <span className="text-xs opacity-75">{formatDays(intervals.hard)}</span>
+                  </Button>
+                  <Button
+                    onClick={() => handleDifficulty('good')}
+                    className="flex flex-col items-center py-4 bg-blue-500 hover:bg-blue-600 text-white"
+                  >
+                    <span className="text-xl mb-1">🙂</span>
+                    <span>Gut</span>
+                    <span className="text-xs opacity-75">{formatDays(intervals.good)}</span>
+                  </Button>
+                  <Button
+                    onClick={() => handleDifficulty('easy')}
+                    className="flex flex-col items-center py-4 bg-green-500 hover:bg-green-600 text-white"
+                  >
+                    <span className="text-xl mb-1">😄</span>
+                    <span>Einfach</span>
+                    <span className="text-xs opacity-75">{formatDays(intervals.easy)}</span>
+                  </Button>
+                </div>
               </div>
-            </div>
+            </motion.div>
           )}
         </div>
       </div>

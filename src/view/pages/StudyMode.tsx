@@ -6,7 +6,7 @@ import { useSettings } from '@/controller/hooks/useSettings';
 import { Button } from '@/view/components/Button';
 import { FlashCard } from '@/view/components/FlashCard';
 import { indexedDBStorage } from '@/model/storage/indexedDB';
-import { calculateNextReview, getDueCards, shuffleArray } from '@/model/services/spaced-repetition';
+import { calculateNextReview, getDueCards, shuffleArray, DEFAULT_INTERVALS } from '@/model/services/spaced-repetition';
 import { motion, AnimatePresence } from 'motion/react';
 import type { Card as CardType, Difficulty } from '@/model/types/types';
 
@@ -90,7 +90,9 @@ export function StudyMode() {
   const handleDifficulty = (difficulty: Difficulty) => {
     if (!currentCard) return;
 
-    const updates = calculateNextReview(currentCard, difficulty);
+    // Use user's custom intervals or defaults
+    const intervals = settings.intervals || DEFAULT_INTERVALS;
+    const updates = calculateNextReview(currentCard, difficulty, intervals);
     updateCard(currentCard.id, updates);
 
     const isCorrect = difficulty === 'good' || difficulty === 'easy';

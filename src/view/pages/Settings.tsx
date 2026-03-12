@@ -1,10 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router';
-import { ArrowLeft, Sun, Moon, Type, Shuffle, Eye, Zap } from 'lucide-react';
+import { ArrowLeft, Sun, Moon, Type, Shuffle, Eye, Zap, Clock, RotateCcw } from 'lucide-react';
 import { useSettings } from '@/controller/hooks/useSettings';
 import { useTheme } from '@/controller/contexts/ThemeContext';
 import { Button } from '@/view/components/Button';
 import { Card } from '@/view/components/Card';
+import { DEFAULT_INTERVALS, INTERVAL_PRESETS } from '@/model/services/spaced-repetition';
+import type { LearningIntervals } from '@/model/types/types';
 
 export function Settings() {
   const navigate = useNavigate();
@@ -16,6 +18,23 @@ export function Settings() {
     const htmlElement = document.documentElement;
     htmlElement.classList.remove('font-size-small', 'font-size-medium', 'font-size-large');
     htmlElement.classList.add(`font-size-${size}`);
+  };
+
+  const handleIntervalChange = (key: keyof LearningIntervals, value: number) => {
+    updateSettings({
+      intervals: {
+        ...settings.intervals,
+        [key]: value,
+      },
+    });
+  };
+
+  const applyPreset = (preset: typeof INTERVAL_PRESETS.standard) => {
+    updateSettings({ intervals: preset.intervals });
+  };
+
+  const resetIntervals = () => {
+    updateSettings({ intervals: DEFAULT_INTERVALS });
   };
 
   return (
@@ -88,6 +107,161 @@ export function Settings() {
                     </button>
                   ))}
                 </div>
+              </div>
+            </div>
+          </Card>
+
+          {/* Learning Intervals */}
+          <Card>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl text-gray-900 dark:text-gray-100 flex items-center gap-2">
+                <Clock className="w-5 h-5" />
+                Lernintervalle
+              </h2>
+              <Button variant="ghost" size="sm" onClick={resetIntervals}>
+                <RotateCcw className="w-4 h-4 mr-1" />
+                Zurücksetzen
+              </Button>
+            </div>
+
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              Passen Sie die Zeitintervalle zwischen den Wiederholungen an Ihr Lerntempo an.
+            </p>
+
+            {/* Presets */}
+            <div className="grid grid-cols-3 gap-3 mb-6">
+              {Object.entries(INTERVAL_PRESETS).map(([key, preset]) => (
+                <button
+                  key={key}
+                  onClick={() => applyPreset(preset)}
+                  className="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:border-blue-500 dark:hover:border-blue-400 transition-colors text-left"
+                >
+                  <p className="font-medium text-gray-900 dark:text-gray-100 text-sm">{preset.name}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">{preset.description}</p>
+                </button>
+              ))}
+            </div>
+
+            {/* Custom Intervals */}
+            <div className="space-y-4">
+              {/* Again Interval */}
+              <div className="py-3 border-b border-gray-200 dark:border-gray-700">
+                <div className="flex justify-between items-center mb-2">
+                  <div>
+                    <p className="text-gray-900 dark:text-gray-100">"Nochmal" - Intervall</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Tage bis zur nächsten Wiederholung nach einer falschen Antwort
+                    </p>
+                  </div>
+                  <span className="text-lg font-semibold text-blue-600">
+                    {settings.intervals?.again ?? DEFAULT_INTERVALS.again} Tag(e)
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min="1"
+                  max="7"
+                  step="1"
+                  value={settings.intervals?.again ?? DEFAULT_INTERVALS.again}
+                  onChange={(e) => handleIntervalChange('again', parseInt(e.target.value))}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                />
+              </div>
+
+              {/* Hard Multiplier */}
+              <div className="py-3 border-b border-gray-200 dark:border-gray-700">
+                <div className="flex justify-between items-center mb-2">
+                  <div>
+                    <p className="text-gray-900 dark:text-gray-100">"Schwer" - Multiplikator</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Verlängerungsfaktor für schwer gewusste Karten
+                    </p>
+                  </div>
+                  <span className="text-lg font-semibold text-blue-600">
+                    {settings.intervals?.hard ?? DEFAULT_INTERVALS.hard}x
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min="1.0"
+                  max="2.0"
+                  step="0.1"
+                  value={settings.intervals?.hard ?? DEFAULT_INTERVALS.hard}
+                  onChange={(e) => handleIntervalChange('hard', parseFloat(e.target.value))}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                />
+              </div>
+
+              {/* Good Multiplier */}
+              <div className="py-3 border-b border-gray-200 dark:border-gray-700">
+                <div className="flex justify-between items-center mb-2">
+                  <div>
+                    <p className="text-gray-900 dark:text-gray-100">"Gut" - Multiplikator</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Standard-Verlängerungsfaktor (&lt; 1 = häufiger, &gt; 1 = seltener)
+                    </p>
+                  </div>
+                  <span className="text-lg font-semibold text-blue-600">
+                    {settings.intervals?.good ?? DEFAULT_INTERVALS.good}x
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min="0.5"
+                  max="1.5"
+                  step="0.1"
+                  value={settings.intervals?.good ?? DEFAULT_INTERVALS.good}
+                  onChange={(e) => handleIntervalChange('good', parseFloat(e.target.value))}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                />
+              </div>
+
+              {/* Easy Multiplier */}
+              <div className="py-3 border-b border-gray-200 dark:border-gray-700">
+                <div className="flex justify-between items-center mb-2">
+                  <div>
+                    <p className="text-gray-900 dark:text-gray-100">"Einfach" - Multiplikator</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Bonus-Faktor für einfach gewusste Karten
+                    </p>
+                  </div>
+                  <span className="text-lg font-semibold text-blue-600">
+                    {settings.intervals?.easy ?? DEFAULT_INTERVALS.easy}x
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min="1.0"
+                  max="2.0"
+                  step="0.1"
+                  value={settings.intervals?.easy ?? DEFAULT_INTERVALS.easy}
+                  onChange={(e) => handleIntervalChange('easy', parseFloat(e.target.value))}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                />
+              </div>
+
+              {/* Easy Bonus */}
+              <div className="py-3">
+                <div className="flex justify-between items-center mb-2">
+                  <div>
+                    <p className="text-gray-900 dark:text-gray-100">"Einfach" - Ease-Bonus</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Wie stark die Karte als "leichter" markiert wird
+                    </p>
+                  </div>
+                  <span className="text-lg font-semibold text-blue-600">
+                    +{settings.intervals?.easyBonus ?? DEFAULT_INTERVALS.easyBonus}
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min="0.05"
+                  max="0.25"
+                  step="0.05"
+                  value={settings.intervals?.easyBonus ?? DEFAULT_INTERVALS.easyBonus}
+                  onChange={(e) => handleIntervalChange('easyBonus', parseFloat(e.target.value))}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                />
               </div>
             </div>
           </Card>
@@ -203,8 +377,8 @@ export function Settings() {
               <p>FlashCards - Intelligentes Lernen mit Karteikarten</p>
               <p>Version 2.0.0</p>
               <p className="pt-2">
-                Diese App verwendet ein Spaced-Repetition-System (SM-2), um Ihnen beim
-                effektiven Lernen zu helfen.
+                Diese App verwendet ein anpassbares Spaced-Repetition-System, um Ihnen beim
+                effektiven Lernen zu helfen. Passen Sie die Intervalle in den Einstellungen an Ihr Lerntempo an.
               </p>
             </div>
           </Card>

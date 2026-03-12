@@ -4,15 +4,16 @@ import { Lightbulb, X, RotateCcw, Shuffle, ArrowLeftRight } from 'lucide-react';
 import { Button } from '@/view/ui/button';
 import { Card, CardContent } from '@/view/ui/card';
 import { Progress } from '@/view/ui/progress';
-import type { Deck } from '@/model/types/types';
-import type { Card as FlashCard } from '@/model/types/types';
+import { useSettings } from '@/controller/hooks/useSettings';
+import { calculateNextReview, DEFAULT_INTERVALS } from '@/model/services/spaced-repetition';
+import type { Deck, Card as FlashCard, Difficulty } from '@/model/types/types';
 
 interface LearnModeProps {
   deck: Deck;
   cards: FlashCard[];
   onExit: () => void;
   onUpdateCard: (cardId: string, updates: Partial<FlashCard>) => void;
-  onCardReviewed: (difficulty: 'easy' | 'medium' | 'hard', isCorrect: boolean) => void;
+  onCardReviewed: (difficulty: 'easy' | 'good' | 'hard' | 'again', isCorrect: boolean) => void;
 }
 
 interface CardWithReverse extends FlashCard {
@@ -46,7 +47,16 @@ const isAnswerCorrect = (userAnswer: string, correctAnswer: string): boolean => 
   return false;
 };
 
+// Map old ratings to new difficulty system
+const mapRatingToDifficulty = (rating: 'hard' | 'medium' | 'easy', isCorrect: boolean): Difficulty => {
+  if (!isCorrect) return 'again';
+  if (rating === 'hard') return 'hard';
+  if (rating === 'medium') return 'good';
+  return 'easy';
+};
+
 export function LearnMode({ deck, cards, onExit, onUpdateCard, onCardReviewed }: LearnModeProps) {
+  const { settings } = useSettings();
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [showHint, setShowHint] = useState(false);
@@ -55,8 +65,11 @@ export function LearnMode({ deck, cards, onExit, onUpdateCard, onCardReviewed }:
   const [userAnswer, setUserAnswer] = useState('');
   const [showAnswer, setShowAnswer] = useState(false);
   const [answerIsCorrect, setAnswerIsCorrect] = useState(false);
-  const [randomizeOrder, setRandomizeOrder] = useState(false);
-  const [randomizeSides, setRandomizeSides] = useState(false);
+  const [randomizeOrder, setRandomizeOrder] = useState(settings.shuffleMode);
+  const [randomizeSides, setRandomizeSides] = useState(settings.randomSide);
+
+  // Use user's intervals or defaults
+  const intervals = settings.intervals || DEFAULT_INTERVALS;
 
   const prepareCards = (shouldRandomizeOrder: boolean, shouldRandomizeSides: boolean) => {
     let processedCards: CardWithReverse[] = [...cards];
@@ -162,25 +175,25 @@ export function LearnMode({ deck, cards, onExit, onUpdateCard, onCardReviewed }:
     setShowAnswer(true);
   };
 
-  const handleRating = (difficulty: 'easy' | 'medium' | 'hard') => {
-    // Update card with spaced repetition logic
-    const now = new Date();
-    const intervals = {
-      easy: 7, // 7 days
-      medium: 3, // 3 days
-      hard: 1, // 1 day
-    };
+  // Calculate next review date for display
+  const getNextReviewLabel = (difficulty: Difficulty): string => {
+    const result = calculateNextReview(currentCard, difficulty, intervals);
+    const days = result.interval;
+    if (days === 1) return 'Morgen';
+    if (days < 30) return `${days} Tage`;
+    const months = Math.round(days / 30);
+    return `${months} Monat${months > 1 ? 'e' : ''}`;
+  };
+
+  const handleRating = (rating: 'hard' | 'medium' | 'easy') => {
+    const difficulty = mapRatingToDifficulty(rating, answerIsCorrect);
     
-    const nextReview = new Date(now);
-    nextReview.setDate(nextReview.getDate() + intervals[difficulty]);
+    // Use the spaced repetition algorithm with user's intervals
+    const updates = calculateNextReview(currentCard, difficulty, intervals);
 
-    onUpdateCard(currentCard.id, {
-      difficulty,
-      nextReview,
-      reviewCount: currentCard.reviewCount + 1,
-    });
+    onUpdateCard(currentCard.id, updates);
 
-    // Call the onCardReviewed callback with answer correctness
+    // Call the onCardReviewed callback
     onCardReviewed(difficulty, answerIsCorrect);
 
     // Move to next card
@@ -473,21 +486,27 @@ export function LearnMode({ deck, cards, onExit, onUpdateCard, onCardReviewed }:
                   className="bg-red-600 hover:bg-red-700 text-white flex-col h-auto py-3"
                 >
                   <span className="font-semibold">Schwer</span>
-                  <div className="text-xs opacity-80 mt-1">Morgen</div>
+                  <div className="text-xs opacity-80 mt-1">
+                    {!answerIsCorrect ? 'Nochmal' : getNextReviewLabel('hard')}
+                  </div>
                 </Button>
                 <Button
                   onClick={() => handleRating('medium')}
                   className="bg-yellow-600 hover:bg-yellow-700 text-white flex-col h-auto py-3"
                 >
-                  <span className="font-semibold">Mittel</span>
-                  <div className="text-xs opacity-80 mt-1">3 Tage</div>
+                  <span className="font-semibold">Gut</span>
+                  <div className="text-xs opacity-80 mt-1">
+                    {!answerIsCorrect ? 'Nochmal' : getNextReviewLabel('good')}
+                  </div>
                 </Button>
                 <Button
                   onClick={() => handleRating('easy')}
                   className="bg-green-600 hover:bg-green-700 text-white flex-col h-auto py-3"
                 >
                   <span className="font-semibold">Leicht</span>
-                  <div className="text-xs opacity-80 mt-1">7 Tage</div>
+                  <div className="text-xs opacity-80 mt-1">
+                    {!answerIsCorrect ? 'Nochmal' : getNextReviewLabel('easy')}
+                  </div>
                 </Button>
               </div>
             </CardContent>

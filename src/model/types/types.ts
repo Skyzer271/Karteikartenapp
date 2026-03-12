@@ -32,6 +32,14 @@ export interface StudySession {
   endTime?: number;
 }
 
+export interface LearningIntervals {
+  again: number;      // Tage nach "Nochmal"
+  hard: number;       // Multiplikator für "Schwer"
+  good: number;       // Multiplikator für "Gut"
+  easy: number;       // Multiplikator für "Einfach"
+  easyBonus: number;  // Extra-Bonus für "Einfach"
+}
+
 export interface Settings {
   darkMode: boolean;
   fontSize: 'small' | 'medium' | 'large';
@@ -39,6 +47,7 @@ export interface Settings {
   showHintButton: boolean;
   shuffleMode: boolean;
   randomSide: boolean;
+  intervals: LearningIntervals;
 }
 
 export interface Statistics {

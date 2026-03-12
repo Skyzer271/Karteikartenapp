@@ -76,12 +76,12 @@ export function StudyMode() {
   const handleRevealSolution = () => {
     // Compare answer when revealing (if user entered something)
     if (userAnswer.trim() && currentCard) {
-      const cardToCompare = (currentCard as any)._showFrontFirst
-        ? currentCard.back
-        : currentCard.front;
+      // The solution shown is displayCard.front
+      // We need to compare against what was displayed as the solution
+      const correctAnswer = displayCard.front;
       
       const isCorrect =
-        userAnswer.trim().toLowerCase() === cardToCompare.trim().toLowerCase();
+        userAnswer.trim().toLowerCase() === correctAnswer.trim().toLowerCase();
       setIsAnswerCorrect(isCorrect);
     }
     

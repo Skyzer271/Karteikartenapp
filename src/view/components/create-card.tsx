@@ -1,18 +1,19 @@
 import { useState } from 'react';
 import { ImagePlus, Volume2, X } from 'lucide-react';
-import { Button } from '@/app/components/ui/button';
-import { Input } from '@/app/components/ui/input';
-import { Textarea } from '@/app/components/ui/textarea';
-import { Label } from '@/app/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/app/components/ui/card';
+import { Button } from '@/view/ui/button';
+import { Input } from '@/view/ui/input';
+import { Textarea } from '@/view/ui/textarea';
+import { Label } from '@/view/ui/label';
+import { Card, CardContent, CardHeader, CardTitle } from '@/view/ui/card';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/app/components/ui/select';
-import type { Deck, Card as FlashCard } from '@/app/App';
+} from '@/view/ui/select';
+import type { Deck } from '@/model/types/types';
+import type { Card as FlashCard } from '@/model/types/types';
 
 interface CreateCardProps {
   decks: Deck[];

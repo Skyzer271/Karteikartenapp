@@ -4,10 +4,11 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/app/components/ui/dialog';
-import { Label } from '@/app/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/app/components/ui/radio-group';
-import type { FontSize } from '@/app/App';
+} from '@/view/ui/dialog';
+import { Label } from '@/view/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/view/ui/radio-group';
+
+type FontSize = 'small' | 'medium' | 'large';
 
 interface SettingsDialogProps {
   open: boolean;

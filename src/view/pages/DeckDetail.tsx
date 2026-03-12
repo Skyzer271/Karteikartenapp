@@ -1,14 +1,14 @@
 import React, { useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { ArrowLeft, Play, Plus, Edit2, Trash2, Pause } from 'lucide-react';
-import { useDecks } from '../hooks/useDecks';
-import { Button } from '../components/Button';
-import { Card } from '../components/Card';
-import { Modal } from '../components/Modal';
-import { Input } from '../components/Input';
-import { Textarea } from '../components/Textarea';
-import { getDueCards } from '../lib/spaced-repetition';
-import type { Card as CardType } from '../types';
+import { useDecks } from '@/controller/hooks/useDecks';
+import { Button } from '@/view/components/Button';
+import { Card } from '@/view/components/Card';
+import { Modal } from '@/view/components/Modal';
+import { Input } from '@/view/components/Input';
+import { Textarea } from '@/view/components/Textarea';
+import { getDueCards } from '@/model/services/spaced-repetition';
+import type { Card as CardType } from '@/model/types/types';
 
 export function DeckDetail() {
   const { deckId } = useParams<{ deckId: string }>();

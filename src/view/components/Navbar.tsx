@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router';
 import { Home, Plus, Settings, Moon, Sun } from 'lucide-react';
-import { useTheme } from '../contexts/ThemeContext';
+import { useTheme } from '@/controller/contexts/ThemeContext';
 
 export function Navbar() {
   const location = useLocation();

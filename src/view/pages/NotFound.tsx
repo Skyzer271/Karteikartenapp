@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router';
 import { Home } from 'lucide-react';
-import { Button } from '../components/Button';
+import { Button } from '@/view/components/Button';
 
 export function NotFound() {
   const navigate = useNavigate();

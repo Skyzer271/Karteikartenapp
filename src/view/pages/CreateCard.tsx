@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Save, ArrowLeft, Plus } from 'lucide-react';
-import { useDecks } from '../hooks/useDecks';
-import { Button } from '../components/Button';
-import { Input } from '../components/Input';
-import { Textarea } from '../components/Textarea';
-import type { Card as CardType } from '../types';
+import { useDecks } from '@/controller/hooks/useDecks';
+import { Button } from '@/view/components/Button';
+import { Input } from '@/view/components/Input';
+import { Textarea } from '@/view/components/Textarea';
+import type { Card as CardType } from '@/model/types/types';
 
 export function CreateCard() {
   const navigate = useNavigate();

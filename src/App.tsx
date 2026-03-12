@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { RouterProvider } from 'react-router';
-import { ThemeProvider } from './contexts/ThemeContext';
-import { router } from './routes';
-import { indexedDBStorage } from './lib/indexedDB';
+import { ThemeProvider } from '@/controller/contexts/ThemeContext';
+import { router } from '@/routes';
+import { indexedDBStorage } from '@/model/storage/indexedDB';
 
 function AppContent() {
   // Apply font size class to html element

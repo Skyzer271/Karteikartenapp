@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Search, Edit, Trash2, Share2, Plus, Download, Upload, Settings, Pause, Play, RotateCcw } from 'lucide-react';
-import { Button } from '@/app/components/ui/button';
-import { Input } from '@/app/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/app/components/ui/card';
-import type { Deck, Card as FlashCard } from '@/app/App';
+import { Button } from '@/view/ui/button';
+import { Input } from '@/view/ui/input';
+import { Card, CardContent, CardHeader, CardTitle } from '@/view/ui/card';
+import type { Deck } from '@/model/types/types';
+import type { Card as FlashCard } from '@/model/types/types';
 import {
   Dialog,
   DialogContent,
@@ -12,8 +13,8 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogFooter,
-} from '@/app/components/ui/dialog';
-import { Label } from '@/app/components/ui/label';
+} from '@/view/ui/dialog';
+import { Label } from '@/view/ui/label';
 
 interface DashboardProps {
   decks: Deck[];

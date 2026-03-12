@@ -1,10 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router';
 import { ArrowLeft, Sun, Moon, Type, Shuffle, Eye, Zap } from 'lucide-react';
-import { useSettings } from '../hooks/useSettings';
-import { useTheme } from '../contexts/ThemeContext';
-import { Button } from '../components/Button';
-import { Card } from '../components/Card';
+import { useSettings } from '@/controller/hooks/useSettings';
+import { useTheme } from '@/controller/contexts/ThemeContext';
+import { Button } from '@/view/components/Button';
+import { Card } from '@/view/components/Card';
 
 export function Settings() {
   const navigate = useNavigate();

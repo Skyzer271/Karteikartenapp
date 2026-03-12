@@ -1,4 +1,4 @@
-import type { Card, Deck, Settings, StudySession } from '../types';
+import type { Card, Deck, Settings, StudySession } from '../types/types';
 
 const DB_NAME = 'FlashcardsDB';
 const DB_VERSION = 1;

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { indexedDBStorage } from '../lib/indexedDB';
+import { indexedDBStorage } from '../../model/storage/indexedDB';
 
 interface ThemeContextType {
   darkMode: boolean;

@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { ArrowLeft, Lightbulb, RotateCcw, CheckCircle } from 'lucide-react';
-import { useDecks } from '../hooks/useDecks';
-import { useSettings } from '../hooks/useSettings';
-import { Button } from '../components/Button';
-import { FlashCard } from '../components/FlashCard';
-import { indexedDBStorage } from '../lib/indexedDB';
-import { calculateNextReview, getDueCards, shuffleArray } from '../lib/spaced-repetition';
+import { useDecks } from '@/controller/hooks/useDecks';
+import { useSettings } from '@/controller/hooks/useSettings';
+import { Button } from '@/view/components/Button';
+import { FlashCard } from '@/view/components/FlashCard';
+import { indexedDBStorage } from '@/model/storage/indexedDB';
+import { calculateNextReview, getDueCards, shuffleArray } from '@/model/services/spaced-repetition';
 import { motion, AnimatePresence } from 'motion/react';
-import type { Card as CardType, Difficulty } from '../types';
+import type { Card as CardType, Difficulty } from '@/model/types/types';
 
 export function StudyMode() {
   const { deckId } = useParams<{ deckId: string }>();

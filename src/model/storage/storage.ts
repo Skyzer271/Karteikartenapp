@@ -1,4 +1,4 @@
-import type { Card, Deck, Settings, StudySession } from '../types';
+import type { Card, Deck, Settings, StudySession } from '../types/types';
 
 const STORAGE_KEYS = {
   DECKS: 'flashcards_decks',

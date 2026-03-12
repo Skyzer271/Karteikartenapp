@@ -1,4 +1,4 @@
-import type { Card, Difficulty } from '../types';
+import type { Card, Difficulty } from '../types/types';
 
 /**
  * Spaced Repetition Algorithm (SM-2)

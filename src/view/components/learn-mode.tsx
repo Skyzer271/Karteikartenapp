@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Lightbulb, X, RotateCcw, Shuffle, ArrowLeftRight } from 'lucide-react';
-import { Button } from '@/app/components/ui/button';
-import { Card, CardContent } from '@/app/components/ui/card';
-import { Progress } from '@/app/components/ui/progress';
-import type { Deck, Card as FlashCard } from '@/app/App';
+import { Button } from '@/view/ui/button';
+import { Card, CardContent } from '@/view/ui/card';
+import { Progress } from '@/view/ui/progress';
+import type { Deck } from '@/model/types/types';
+import type { Card as FlashCard } from '@/model/types/types';
 
 interface LearnModeProps {
   deck: Deck;

@@ -1,11 +1,11 @@
 import { createBrowserRouter } from 'react-router';
-import { Layout } from './Layout';
-import { Dashboard } from './pages/Dashboard';
-import { DeckDetail } from './pages/DeckDetail';
-import { StudyMode } from './pages/StudyMode';
-import { CreateCard } from './pages/CreateCard';
-import { Settings } from './pages/Settings';
-import { NotFound } from './pages/NotFound';
+import { Layout } from '@/Layout';
+import { Dashboard } from '@/view/pages/Dashboard';
+import { DeckDetail } from '@/view/pages/DeckDetail';
+import { StudyMode } from '@/view/pages/StudyMode';
+import { CreateCard } from '@/view/pages/CreateCard';
+import { Settings } from '@/view/pages/Settings';
+import { NotFound } from '@/view/pages/NotFound';
 
 export const router = createBrowserRouter([
   {

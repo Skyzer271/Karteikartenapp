@@ -1,14 +1,14 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { Search, Plus, BookOpen, TrendingUp, Calendar, Trash2, Play } from 'lucide-react';
-import { useDecks } from '../hooks/useDecks';
-import { Button } from '../components/Button';
-import { Input } from '../components/Input';
-import { Card } from '../components/Card';
-import { Modal } from '../components/Modal';
-import { indexedDBStorage } from '../lib/indexedDB';
-import { getMasteredCards, calculateStreak } from '../lib/spaced-repetition';
-import type { Deck } from '../types';
+import { useDecks } from '@/controller/hooks/useDecks';
+import { Button } from '@/view/components/Button';
+import { Input } from '@/view/components/Input';
+import { Card } from '@/view/components/Card';
+import { Modal } from '@/view/components/Modal';
+import { indexedDBStorage } from '@/model/storage/indexedDB';
+import { getMasteredCards, calculateStreak } from '@/model/services/spaced-repetition';
+import type { Deck } from '@/model/types/types';
 
 export function Dashboard() {
   const navigate = useNavigate();

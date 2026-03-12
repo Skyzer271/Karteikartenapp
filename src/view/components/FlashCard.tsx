@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import type { Card as CardType } from '../types';
+import type { Card as CardType } from '@/model/types/types';
 
 interface FlashCardProps {
   card: CardType;

@@ -1,11 +1,12 @@
 import { Menu, Moon, Sun, LayoutDashboard, Plus, BookOpen } from 'lucide-react';
-import { Button } from '@/app/components/ui/button';
-import type { Page } from '@/app/App';
+import { Button } from '@/view/ui/button';
 import { useState } from 'react';
 
+type PageType = 'dashboard' | 'create' | 'settings';
+
 interface HeaderProps {
-  currentPage: Page;
-  onNavigate: (page: Page) => void;
+  currentPage: PageType;
+  onNavigate: (page: PageType) => void;
   darkMode: boolean;
   onToggleDarkMode: () => void;
 }

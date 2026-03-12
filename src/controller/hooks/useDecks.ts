@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import type { Deck, Card, DeckWithStats } from '../types';
-import { indexedDBStorage } from '../lib/indexedDB';
-import { getDueCards, getNewCards } from '../lib/spaced-repetition';
+import type { Deck, Card, DeckWithStats } from '@/model/types/types';
+import { indexedDBStorage } from '@/model/storage/indexedDB';
+import { getDueCards, getNewCards } from '@/model/services/spaced-repetition';
 
 export function useDecks() {
   const [decks, setDecks] = useState<Deck[]>([]);

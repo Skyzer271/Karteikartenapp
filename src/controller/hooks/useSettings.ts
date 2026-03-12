@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { Settings } from '../types';
-import { indexedDBStorage } from '../lib/indexedDB';
+import type { Settings } from '@/model/types/types';
+import { indexedDBStorage } from '@/model/storage/indexedDB';
 
 export function useSettings() {
   const [settings, setSettings] = useState<Settings>({

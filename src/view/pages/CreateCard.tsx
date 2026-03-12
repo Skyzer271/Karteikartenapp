@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { Save, ArrowLeft, Plus } from 'lucide-react';
 import { useDecks } from '@/controller/hooks/useDecks';
@@ -11,7 +11,14 @@ export function CreateCard() {
   const navigate = useNavigate();
   const { decks, addCard } = useDecks();
 
-  const [selectedDeckId, setSelectedDeckId] = useState(decks[0]?.id || '');
+  const [selectedDeckId, setSelectedDeckId] = useState('');
+
+  // Set first deck as default when decks are loaded
+  useEffect(() => {
+    if (decks.length > 0 && !selectedDeckId) {
+      setSelectedDeckId(decks[0].id);
+    }
+  }, [decks, selectedDeckId]);
   const [cards, setCards] = useState<Array<{ front: string; back: string; hint: string }>>([
     { front: '', back: '', hint: '' },
   ]);

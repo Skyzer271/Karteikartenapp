@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router';
+import { useNavigate } from 'react-router';
 import { Home, Loader2 } from 'lucide-react';
 import { Button } from '@/view/components/Button';
 
+// Zeigt Ladezustand und leitet zum Dashboard um
 export function NotFound() {
   const navigate = useNavigate();
-  const location = useLocation();
 
-  // Auto-redirect to dashboard after a short delay
   useEffect(() => {
     const timer = setTimeout(() => {
       navigate('/', { replace: true });

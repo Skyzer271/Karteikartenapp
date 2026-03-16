@@ -53,7 +53,7 @@ export function StudyMode() {
     if (dueCards.length > 0 && !initializedRef.current) {
       let cards = settings.shuffleMode ? shuffleArray([...dueCards]) : [...dueCards];
       
-      // Determine which side to show for each card
+      // Zufällige Seite wählen
       if (settings.randomSide) {
         cards = cards.map((card) => ({
           ...card,
@@ -72,12 +72,9 @@ export function StudyMode() {
   // Get user's custom intervals or defaults - must be at component scope for JSX access
   const intervals = settings.intervals || DEFAULT_INTERVALS;
 
-  // Handle revealing the solution
+  // Lösung aufdecken und Antwort prüfen
   const handleRevealSolution = () => {
-    // Compare answer when revealing (if user entered something)
     if (userAnswer.trim() && currentCard) {
-      // The solution shown is displayCard.front
-      // We need to compare against what was displayed as the solution
       const correctAnswer = displayCard.front;
       
       const isCorrect =

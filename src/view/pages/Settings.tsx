@@ -37,13 +37,12 @@ export function Settings() {
     updateSettings({ intervals: DEFAULT_INTERVALS });
   };
 
-  // Get current intervals or defaults
   const currentIntervals = settings.intervals || DEFAULT_INTERVALS;
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
+        {/* Seitenkopf */}
         <div className="mb-8">
           <Button variant="ghost" onClick={() => navigate('/')} className="mb-4">
             <ArrowLeft className="w-5 h-5 mr-2" />
@@ -55,9 +54,9 @@ export function Settings() {
           </p>
         </div>
 
-        {/* Settings Sections */}
+        {/* Einstellungsbereiche */}
         <div className="space-y-6">
-          {/* Appearance */}
+          {/* Erscheinungsbild */}
           <Card>
             <h2 className="text-xl text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
               <Sun className="w-5 h-5" />
@@ -65,7 +64,7 @@ export function Settings() {
             </h2>
 
             <div className="space-y-4">
-              {/* Dark Mode */}
+              {/* Dunkelmodus */}
               <div className="flex items-center justify-between py-3 border-b border-gray-200 dark:border-gray-700">
                 <div>
                   <p className="text-gray-900 dark:text-gray-100">Dunkler Modus</p>
@@ -87,7 +86,7 @@ export function Settings() {
                 </button>
               </div>
 
-              {/* Font Size */}
+              {/* Schriftgröße */}
               <div className="py-3">
                 <div className="flex items-center gap-2 mb-3">
                   <Type className="w-5 h-5 text-gray-600 dark:text-gray-400" />
@@ -114,7 +113,7 @@ export function Settings() {
             </div>
           </Card>
 
-          {/* Learning Intervals */}
+          {/* Lernintervalle */}
           <Card>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl text-gray-900 dark:text-gray-100 flex items-center gap-2">
@@ -131,7 +130,7 @@ export function Settings() {
               Legen Sie fest, wie viele Tage vergehen sollen, bis eine Karte wieder angezeigt wird.
             </p>
 
-            {/* Presets */}
+            {/* Voreinstellungen */}
             <div className="grid grid-cols-3 gap-3 mb-6">
               {Object.entries(INTERVAL_PRESETS).map(([key, preset]) => (
                 <button
@@ -145,9 +144,9 @@ export function Settings() {
               ))}
             </div>
 
-            {/* Custom Intervals */}
+            {/* Benutzerdefinierte Intervalle */}
             <div className="space-y-6">
-              {/* Again Interval */}
+              {/* Nochmal-Intervall */}
               <div className="py-3 border-b border-gray-200 dark:border-gray-700">
                 <div className="flex justify-between items-center mb-3">
                   <div>
@@ -175,7 +174,7 @@ export function Settings() {
                 </div>
               </div>
 
-              {/* Hard Interval */}
+              {/* Schwer-Intervall */}
               <div className="py-3 border-b border-gray-200 dark:border-gray-700">
                 <div className="flex justify-between items-center mb-3">
                   <div>
@@ -203,7 +202,7 @@ export function Settings() {
                 </div>
               </div>
 
-              {/* Good Interval */}
+              {/* Gut-Intervall */}
               <div className="py-3 border-b border-gray-200 dark:border-gray-700">
                 <div className="flex justify-between items-center mb-3">
                   <div>
@@ -231,7 +230,7 @@ export function Settings() {
                 </div>
               </div>
 
-              {/* Easy Interval */}
+              {/* Einfach-Intervall */}
               <div className="py-3">
                 <div className="flex justify-between items-center mb-3">
                   <div>
@@ -261,7 +260,7 @@ export function Settings() {
             </div>
           </Card>
 
-          {/* Learning Settings */}
+          {/* Lern-Einstellungen */}
           <Card>
             <h2 className="text-xl text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
               <Zap className="w-5 h-5" />
@@ -269,7 +268,7 @@ export function Settings() {
             </h2>
 
             <div className="space-y-4">
-              {/* Auto Recognition */}
+              {/* Automatische Erkennung */}
               <div className="flex items-center justify-between py-3 border-b border-gray-200 dark:border-gray-700">
                 <div>
                   <p className="text-gray-900 dark:text-gray-100">Automatische Antworterkennung</p>
@@ -291,7 +290,7 @@ export function Settings() {
                 </button>
               </div>
 
-              {/* Show Hint Button */}
+              {/* Hinweis-Button */}
               <div className="flex items-center justify-between py-3 border-b border-gray-200 dark:border-gray-700">
                 <div>
                   <p className="text-gray-900 dark:text-gray-100">Hinweis-Button anzeigen</p>
@@ -313,7 +312,7 @@ export function Settings() {
                 </button>
               </div>
 
-              {/* Shuffle Mode */}
+              {/* Zufallsmodus */}
               <div className="flex items-center justify-between py-3 border-b border-gray-200 dark:border-gray-700">
                 <div>
                   <p className="text-gray-900 dark:text-gray-100 flex items-center gap-2">
@@ -338,7 +337,7 @@ export function Settings() {
                 </button>
               </div>
 
-              {/* Random Side */}
+              {/* Zufällige Seite */}
               <div className="flex items-center justify-between py-3">
                 <div>
                   <p className="text-gray-900 dark:text-gray-100 flex items-center gap-2">
@@ -365,7 +364,7 @@ export function Settings() {
             </div>
           </Card>
 
-          {/* About */}
+          {/* Über */}
           <Card>
             <h2 className="text-xl text-gray-900 dark:text-gray-100 mb-4">Über die App</h2>
             <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400">

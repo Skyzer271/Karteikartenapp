@@ -13,7 +13,7 @@ export function CreateCard() {
 
   const [selectedDeckId, setSelectedDeckId] = useState('');
 
-  // Set first deck as default when decks are loaded
+  // Erstes Deck als Standard setzen
   useEffect(() => {
     if (decks.length > 0 && !selectedDeckId) {
       setSelectedDeckId(decks[0].id);

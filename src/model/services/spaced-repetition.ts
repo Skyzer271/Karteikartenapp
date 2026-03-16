@@ -1,25 +1,15 @@
 import type { Card, Difficulty, LearningIntervals } from '../types/types';
 
-/**
- * Spaced Repetition Algorithm with Customizable Day Intervals
- * Users can set exact days for each difficulty level
- */
+// Algorithmus für individuelle Lernintervalle
 
-// Default intervals for new users
 export const DEFAULT_INTERVALS: LearningIntervals = {
-  again: 1,   // 1 day after "Again"
-  hard: 1,    // 1 day for "Hard"
-  good: 6,    // 6 days for "Good"
-  easy: 10,   // 10 days for "Easy"
+  again: 1,
+  hard: 1,
+  good: 6,
+  easy: 10,
 };
 
-/**
- * Calculate next review date based on difficulty and user-defined day intervals
- * @param card - The flashcard to update
- * @param difficulty - User's rating of how well they knew the card
- * @param intervals - User's custom interval settings (in days)
- * @returns Partial card object with updated review data
- */
+// Berechnet das nächste Review-Datum basierend auf Schwierigkeit
 export function calculateNextReview(
   card: Card, 
   difficulty: Difficulty,
@@ -30,27 +20,23 @@ export function calculateNextReview(
 
   switch (difficulty) {
     case 'again':
-      // Reset progress - use user's "again" interval (default: 1 day)
       interval = intervals.again;
       repetitions = 0;
       easeFactor = Math.max(1.3, easeFactor - 0.2);
       break;
 
     case 'hard':
-      // Hard - use user's hard interval directly (0-7 days)
       interval = intervals.hard;
       easeFactor = Math.max(1.3, easeFactor - 0.15);
       repetitions += 1;
       break;
 
     case 'good':
-      // Good - use user's good interval directly (4-14 days)
       interval = intervals.good;
       repetitions += 1;
       break;
 
     case 'easy':
-      // Easy - use user's easy interval directly (7-28 days)
       interval = intervals.easy;
       easeFactor = Math.min(2.5, easeFactor + 0.15);
       repetitions += 1;
@@ -68,6 +54,7 @@ export function calculateNextReview(
   };
 }
 
+// Filtert Karten die heute fällig sind
 export function getDueCards(cards: Card[]): Card[] {
   const now = Date.now();
   return cards.filter((card) => {
@@ -78,14 +65,17 @@ export function getDueCards(cards: Card[]): Card[] {
   });
 }
 
+// Neue Karten (noch nie gelernt)
 export function getNewCards(cards: Card[]): Card[] {
   return cards.filter((card) => card.repetitions === 0);
 }
 
+// Gemeisterte Karten
 export function getMasteredCards(cards: Card[]): Card[] {
   return cards.filter((card) => card.repetitions >= 5 && card.easeFactor >= 2.0);
 }
 
+// Mischt Karten zufällig
 export function shuffleArray<T>(array: T[]): T[] {
   const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
@@ -95,6 +85,7 @@ export function shuffleArray<T>(array: T[]): T[] {
   return shuffled;
 }
 
+// Berechnet Lern-Streak (Tage in Folge)
 export function calculateStreak(sessions: { startTime: number }[]): number {
   if (sessions.length === 0) return 0;
 
@@ -123,9 +114,7 @@ export function calculateStreak(sessions: { startTime: number }[]): number {
   return streak;
 }
 
-/**
- * Get interval preset for different learning styles
- */
+// Voreingestellte Intervalle
 export const INTERVAL_PRESETS = {
   relaxed: {
     name: 'Entspannt',
@@ -154,9 +143,7 @@ export const INTERVAL_PRESETS = {
   },
 };
 
-/**
- * Format days into human-readable string
- */
+// Formatiert Tage als lesbaren Text
 export function formatDays(days: number): string {
   if (days === 0) return 'Heute';
   if (days === 1) return 'Morgen';

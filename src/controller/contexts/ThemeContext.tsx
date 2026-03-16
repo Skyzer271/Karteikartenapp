@@ -8,11 +8,11 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
+// Theme Provider für Dark/Light Mode
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
-    // Load settings from IndexedDB
     indexedDBStorage.getSettings().then((settings) => {
       setDarkMode(settings.darkMode);
     });

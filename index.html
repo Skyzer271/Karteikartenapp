@@ -4,30 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Karteikarten-App</title>
-    <meta name="description" content="Intelligentes Lernen mit Karteikarten und Spaced Repetition" />
+    <meta name="description" content="Intelligentes Lernen mit Karteikarten" />
     
-    <!-- GitHub Pages SPA Redirect Script -->
-    <script type="text/javascript">
-      // Single Page Apps for GitHub Pages
-      // This script handles routing for SPAs on GitHub Pages
+    <!-- SPA-Routing für GitHub Pages -->
+    <script>
       (function() {
-        // Get the current path
         var path = window.location.pathname;
         var repo = '/Karteikartenapp';
         
-        // Check if we're on GitHub Pages and not at the root
         if (path.indexOf(repo) === 0 && path !== repo + '/' && !path.match(/\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$/)) {
-          // Save the current path to sessionStorage
           sessionStorage.setItem('spa-redirect', path + window.location.search + window.location.hash);
-          // Redirect to the root
           window.location.replace(repo + '/');
         }
         
-        // Check if we have a saved redirect
         var redirect = sessionStorage.getItem('spa-redirect');
         if (redirect) {
           sessionStorage.removeItem('spa-redirect');
-          // Use history API to restore the original URL
           if (window.history && window.history.replaceState) {
             window.history.replaceState(null, null, redirect);
           }
@@ -35,7 +27,7 @@
       })();
     </script>
     
-    <!-- Theme Detection - Prevent Flash -->
+    <!-- Dark Mode Erkennung -->
     <script>
       (function() {
         const savedTheme = localStorage.getItem('theme');

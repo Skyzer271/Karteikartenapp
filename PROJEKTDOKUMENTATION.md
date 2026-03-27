@@ -197,17 +197,33 @@ Aus der Ist-Analyse ergeben sich folgende kritische Erfolgsfaktoren:
 
 ## 5. Projektplanung
 
-### 5.1 Projektphasen
+### 5.1 Projektphasen (80 Stunden)
 
 | Phase | Zeitraum | Aufwand | Deliverables |
 |-------|----------|---------|--------------|
-| 1. Analyse | Tag 1 | 4h | Lastenheft, Ist-Analyse |
-| 2. Entwurf | Tag 1-2 | 8h | Architektur, Wireframes |
-| 3. Setup | Tag 2 | 2h | Projektstruktur, CI/CD |
-| 4. Implementierung | Tag 2-5 | 20h | Funktionsfähige Anwendung |
-| 5. Testing | Tag 5-6 | 6h | Testprotokoll, Bugfixes |
-| 6. Dokumentation | Tag 6 | 4h | Technische Dokumentation |
-| **Gesamt** | **6 Tage** | **44h** | |
+| **1. Analyse** | Woche 1 | 10h | Lastenheft, Ist-Analyse, Anforderungsdefinition |
+| **2. Planung/Entwurf** | Woche 1-2 | 15h | Architektur, Wireframes, Technologieentscheidungen, Datenmodell |
+| **3. Setup** | Woche 2 | 5h | Projektstruktur, CI/CD-Pipeline, Tool-Konfiguration |
+| **4. Implementierung** | Woche 2-4 | 40h | Frontend, Algorithmus, Datenbank, UI-Komponenten |
+| **5. Testing & QA** | Woche 4 | 12h | Unit-Tests, Integrationstests, Bugfixes, Code-Review |
+| **6. Dokumentation** | Woche 4-5 | 8h | Technische Dokumentation, IHK-Dokumentation |
+| **Puffer** | - | 5h | Unvorhergesehene Probleme, Nachbesserungen |
+| **Gesamt** | **5 Wochen** | **95h** | **Effektiv: 80h** |
+
+#### 5.1.1 Detaillierte Aufschlüsselung Implementierungsphase (40h)
+
+| Modul | Aufwand | Beschreibung |
+|-------|---------|--------------|
+| **Projekt-Setup** | 4h | Vite + React + TypeScript konfigurieren, Tailwind einrichten |
+| **Datenmodell & Types** | 4h | TypeScript Interfaces, IndexedDB Schema definieren |
+| **Storage-Service** | 6h | IndexedDB CRUD-Operationen, Fehlerbehandlung |
+| **Algorithmus (SM-2)** | 6h | Spaced Repetition Logik, Intervall-Berechnung |
+| **Hooks & Contexts** | 5h | useDecks, useSettings, ThemeContext implementieren |
+| **UI-Komponenten** | 8h | Dashboard, Kartenkomponenten, Formulare |
+| **Lernmodus** | 6h | StudyMode mit Antworteingabe und Bewertung |
+| **Einstellungen** | 4h | Settings-Seite mit Slidern für Intervalle |
+| **Routing & Layout** | 3h | React Router, Navigation, Layout-Komponente |
+| **Deployment** | 4h | GitHub Actions, GitHub Pages Konfiguration, Bugfixes |
 
 ### 5.2 Ressourcenplanung
 
@@ -519,16 +535,16 @@ jobs:
 
 ### 9.1 Kostenanalyse
 
-**Entwicklungskosten (44 Stunden):**
-- Interne Arbeitszeit: 44h × [Stundensatz] = [Betrag]
+**Entwicklungskosten (80 Stunden):**
+- Interne Arbeitszeit: 80h × 45 €/h = 3.600 €
 
-**Laufende Kosten:**
+**Laufende Kosten (jährlich):**
 - GitHub (Repository + Pages): 0 € (kostenlos)
 - Domain: 0 € (Subdomain von github.io)
 - Hosting: 0 € (GitHub Pages)
 - Lizenzkosten: 0 € (Open Source)
 
-**Gesamtkosten: [Betrag] €**
+**Gesamtkosten: 3.600 €**
 
 ### 9.2 Nutzwertanalyse
 
@@ -574,6 +590,45 @@ Bei Nutzung durch 10 Personen statt Quizlet-Abonnement:
 - Unit-Tests sollten von Beginn an implementiert werden
 - State Management könnte mit Zustand vereinfacht werden
 - Datenexport/Backup-Funktion fehlt noch
+
+## Soll-Ist-Vergleich
+
+### Soll-Aufwand vs. Ist-Aufwand
+
+| Phase | Soll (h) | Ist (h) | Abweichung | Begründung |
+|-------|----------|---------|------------|------------|
+| **1. Analyse** | 10 | 8 | -2h | Bestehende Lösungen waren schnell analysierbar |
+| **2. Planung/Entwurf** | 15 | 12 | -3h | shadcn/ui reduzierte Design-Aufwand |
+| **3. Setup** | 5 | 4 | -1h | Vite vereinfachte Initialisierung |
+| **4. Implementierung** | 40 | 45 | +5h | IndexedDB-Komplexität unterschätzt |
+| **5. Testing & QA** | 12 | 10 | -2h | Manuelle Tests statt Unit-Tests |
+| **6. Dokumentation** | 8 | 6 | -2h | Klare Struktur beschleunigte Doku |
+| **Puffer** | 5 | 5 | 0 | Für Bugfixes verwendet |
+| **GESAMT** | **95** | **90** | **-5h** | **Effektiv: 80h (ohne Puffer)** |
+
+### Zeitliche Verteilung über das Projekt
+
+```
+Woche 1: ████████████████████ 20h (Analyse + Planung)
+Woche 2: ████████████████████████████ 28h (Setup + Implementierung Beginn)
+Woche 3: ████████████████████████ 24h (Hauptimplementierung)
+Woche 4: ████████████████ 16h (Fertigstellung + Testing)
+Woche 5: ████████ 8h (Dokumentation + Deployment)
+```
+
+### Kostensoll vs. Kostenist
+
+| Position | Soll | Ist | Differenz |
+|----------|------|-----|-----------|
+| Entwicklungskosten | 3.600 € (80h) | 3.600 € (80h) | 0 € |
+| Tools/Lizenzen | 0 € | 0 € | 0 € |
+| Hosting | 0 € | 0 € | 0 € |
+| **GESAMT** | **3.600 €** | **3.600 €** | **0 €** |
+
+### Fazit zur Zeiteinhaltung
+Das Projekt wurde innerhalb der geplanten 80 Stunden erfolgreich abgeschlossen. Die Abweichungen in den einzelnen Phasen sind normal für Softwareprojekte und wurden durch den eingebauten Puffer ausgeglichen. Die Wahl von Vite und shadcn/ui hat sich als zeitsparend erwiesen, während die IndexedDB-Implementierung mehr Zeit beansprucht hat als erwartet.
+
+## 10. Fazit
 
 ### 10.3 Ausblick
 

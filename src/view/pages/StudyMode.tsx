@@ -4,7 +4,6 @@ import { ArrowLeft, Lightbulb, RotateCcw, CheckCircle, Eye } from 'lucide-react'
 import { useDecks } from '@/controller/hooks/useDecks';
 import { useSettings } from '@/controller/hooks/useSettings';
 import { Button } from '@/view/components/Button';
-import { FlashCard } from '@/view/components/FlashCard';
 import { indexedDBStorage } from '@/model/storage/indexedDB';
 import { calculateNextReview, getDueCards, shuffleArray, DEFAULT_INTERVALS, formatDays } from '@/model/services/spaced-repetition';
 import { motion, AnimatePresence } from 'motion/react';
@@ -18,14 +17,13 @@ export function StudyMode() {
 
   const isAllMode = deckId === 'all';
   
-  // For "all" mode, we create a virtual deck
+  // Virtuelles Deck für "alle"-Modus
   const deck = isAllMode 
     ? { id: 'all', name: 'Alle Decks', color: '#007BFF' }
     : decks.find((d) => d.id === deckId);
     
   const allCards = useMemo(() => {
     if (isAllMode) {
-      // Return all cards from all decks
       return cards;
     }
     return getCardsByDeck(deckId || '');
@@ -48,7 +46,7 @@ export function StudyMode() {
   
   const initializedRef = useRef(false);
 
-  // Initialize study session - only run once when dueCards are first available
+  // Lernsession initialisieren
   useEffect(() => {
     if (dueCards.length > 0 && !initializedRef.current) {
       let cards = settings.shuffleMode ? shuffleArray([...dueCards]) : [...dueCards];
@@ -69,7 +67,7 @@ export function StudyMode() {
   const currentCard = studyCards[currentIndex];
   const isLastCard = currentIndex === studyCards.length - 1;
 
-  // Get user's custom intervals or defaults - must be at component scope for JSX access
+  // Intervalle aus Einstellungen oder Standard
   const intervals = settings.intervals || DEFAULT_INTERVALS;
 
   // Lösung aufdecken und Antwort prüfen
@@ -98,7 +96,7 @@ export function StudyMode() {
       correctAnswers: prev.correctAnswers + (isCorrect ? 1 : 0),
     }));
 
-    // Move to next card
+    // Nächste Karte
     if (isLastCard) {
       finishSession();
     } else {
@@ -125,7 +123,6 @@ export function StudyMode() {
       endTime: Date.now(),
     };
     indexedDBStorage.addSession(session);
-    // Navigate back to dashboard for "all" mode, or to deck detail for single deck
     navigate(isAllMode ? '/' : `/deck/${deckId}`);
   };
 
@@ -187,7 +184,7 @@ export function StudyMode() {
           </div>
         </div>
 
-        {/* Progress Bar */}
+        {/* Fortschrittsbalken */}
         <div className="mb-8">
           <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
             <motion.div
@@ -199,7 +196,7 @@ export function StudyMode() {
           </div>
         </div>
 
-        {/* Question Card (Front Side) - Always shown first */}
+        {/* Frage-Karte */}
         <AnimatePresence mode="wait">
           <motion.div
             key={currentCard.id}
@@ -223,7 +220,7 @@ export function StudyMode() {
           </motion.div>
         </AnimatePresence>
 
-        {/* Answer Input - Only shown before revealing */}
+        {/* Antwort-Eingabe */}
         {!isRevealed && (
           <div className="mt-6 max-w-2xl mx-auto">
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-2 text-center">
@@ -245,7 +242,7 @@ export function StudyMode() {
           </div>
         )}
 
-        {/* Solution Card - Shown after revealing */}
+        {/* Lösungs-Karte */}
         {isRevealed && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -264,7 +261,7 @@ export function StudyMode() {
               </p>
             </div>
 
-            {/* Answer Comparison */}
+            {/* Antwort-Vergleich */}
             {userAnswer.trim() && (
               <motion.div
                 initial={{ opacity: 0 }}
@@ -296,7 +293,7 @@ export function StudyMode() {
           </motion.div>
         )}
 
-        {/* Hint Button */}
+        {/* Hinweis-Button */}
         {settings.showHintButton && currentCard.hint && !showHint && !isRevealed && (
           <div className="mt-6 text-center">
             <Button variant="secondary" onClick={() => setShowHint(true)}>
@@ -306,7 +303,7 @@ export function StudyMode() {
           </div>
         )}
 
-        {/* Hint Display */}
+        {/* Hinweis-Anzeige */}
         {showHint && currentCard.hint && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -320,7 +317,7 @@ export function StudyMode() {
           </motion.div>
         )}
 
-        {/* Action Buttons */}
+        {/* Aktions-Buttons */}
         <div className="mt-8 max-w-2xl mx-auto">
           {!isRevealed ? (
             <div className="flex gap-3 justify-center">

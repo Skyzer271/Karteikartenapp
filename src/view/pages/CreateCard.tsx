@@ -19,6 +19,7 @@ export function CreateCard() {
       setSelectedDeckId(decks[0].id);
     }
   }, [decks, selectedDeckId]);
+
   const [cards, setCards] = useState<Array<{ front: string; back: string; hint: string }>>([
     { front: '', back: '', hint: '' },
   ]);
@@ -103,7 +104,7 @@ export function CreateCard() {
           </p>
         </div>
 
-        {/* Deck Selection */}
+        {/* Deck-Auswahl */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-6">
           <label className="block text-sm mb-2 text-gray-700 dark:text-gray-300">
             Deck auswählen
@@ -121,7 +122,7 @@ export function CreateCard() {
           </select>
         </div>
 
-        {/* Card Forms */}
+        {/* Karten-Formulare */}
         <div className="space-y-6">
           {cards.map((card, index) => (
             <div
@@ -171,7 +172,7 @@ export function CreateCard() {
           ))}
         </div>
 
-        {/* Actions */}
+        {/* Aktionen */}
         <div className="mt-6 flex flex-col sm:flex-row gap-3">
           <Button variant="secondary" onClick={handleAddCardField} className="flex-1">
             <Plus className="w-5 h-5 mr-2" />

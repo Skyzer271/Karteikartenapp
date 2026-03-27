@@ -1,13 +1,12 @@
 import { createBrowserRouter } from 'react-router';
-import { Layout } from '@/Layout';
-import { Dashboard } from '@/view/pages/Dashboard';
-import { DeckDetail } from '@/view/pages/DeckDetail';
-import { StudyMode } from '@/view/pages/StudyMode';
-import { CreateCard } from '@/view/pages/CreateCard';
-import { Settings } from '@/view/pages/Settings';
-import { NotFound } from '@/view/pages/NotFound';
+import { Layout } from './Layout';
+import { Dashboard } from './view/pages/Dashboard';
+import { DeckDetail } from './view/pages/DeckDetail';
+import { StudyMode } from './view/pages/StudyMode';
+import { CreateCard } from './view/pages/CreateCard';
+import { Settings } from './view/pages/Settings';
+import { NotFound } from './view/pages/NotFound';
 
-// Router-Konfiguration mit GitHub Pages Basispfad
 export const router = createBrowserRouter(
   [
     {

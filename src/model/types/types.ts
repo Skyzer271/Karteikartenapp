@@ -1,4 +1,5 @@
-// Core Types
+// Datentypen für die Anwendung
+
 export interface Card {
   id: string;
   front: string;
@@ -8,7 +9,7 @@ export interface Card {
   createdAt: number;
   lastReviewed: number | null;
   nextReview: number;
-  interval: number; // days
+  interval: number;
   easeFactor: number;
   repetitions: number;
   isPaused: boolean;
@@ -33,10 +34,10 @@ export interface StudySession {
 }
 
 export interface LearningIntervals {
-  again: number;      // Tage nach "Nochmal" (1-7)
-  hard: number;       // Tage für "Schwer" (0-7)
-  good: number;       // Tage für "Gut" (4-14)
-  easy: number;       // Tage für "Einfach" (7-28)
+  again: number;
+  hard: number;
+  good: number;
+  easy: number;
 }
 
 export interface Settings {

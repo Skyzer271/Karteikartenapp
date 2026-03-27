@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { RouterProvider } from 'react-router';
-import { ThemeProvider } from '@/controller/contexts/ThemeContext';
-import { router } from '@/routes';
-import { indexedDBStorage } from '@/model/storage/indexedDB';
+import { ThemeProvider } from './controller/contexts/ThemeContext';
+import { router } from './routes';
+import { indexedDBStorage } from './model/storage/indexedDB';
 
 function AppContent() {
-  // Apply font size class to html element
   useEffect(() => {
     indexedDBStorage.getSettings().then((settings) => {
       const htmlElement = document.documentElement;

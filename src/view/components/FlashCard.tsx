@@ -32,7 +32,6 @@ export function FlashCard({ card, showBack = false, onFlip, fontSize }: FlashCar
         transition={{ duration: 0.6, type: 'spring', stiffness: 100 }}
         onClick={handleFlip}
       >
-        {/* Front */}
         <div
           className="absolute inset-0 bg-card rounded-2xl shadow-2xl p-8 flex items-center justify-center border border-border"
           style={{
@@ -48,7 +47,6 @@ export function FlashCard({ card, showBack = false, onFlip, fontSize }: FlashCar
           </div>
         </div>
 
-        {/* Back */}
         <div
           className="absolute inset-0 bg-card rounded-2xl shadow-2xl p-8 flex items-center justify-center border-2 border-primary"
           style={{

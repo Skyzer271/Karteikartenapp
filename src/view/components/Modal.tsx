@@ -31,7 +31,6 @@ export function Modal({ isOpen, onClose, title, children, maxWidth = 'max-w-lg' 
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -40,7 +39,6 @@ export function Modal({ isOpen, onClose, title, children, maxWidth = 'max-w-lg' 
             className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
           />
 
-          {/* Modal */}
           <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -48,7 +46,6 @@ export function Modal({ isOpen, onClose, title, children, maxWidth = 'max-w-lg' 
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               className={`bg-card rounded-2xl shadow-2xl w-full ${maxWidth} max-h-[90vh] overflow-hidden flex flex-col`}
             >
-              {/* Header */}
               <div className="flex items-center justify-between p-6 border-b border-border">
                 <h2 className="text-xl">{title}</h2>
                 <button
@@ -60,7 +57,6 @@ export function Modal({ isOpen, onClose, title, children, maxWidth = 'max-w-lg' 
                 </button>
               </div>
 
-              {/* Content */}
               <div className="p-6 overflow-y-auto flex-1">{children}</div>
             </motion.div>
           </div>

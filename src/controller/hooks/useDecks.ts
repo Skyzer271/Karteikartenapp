@@ -1,14 +1,13 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import type { Deck, Card, DeckWithStats } from '@/model/types/types';
-import { indexedDBStorage } from '@/model/storage/indexedDB';
-import { getDueCards, getNewCards } from '@/model/services/spaced-repetition';
+import type { Deck, Card, DeckWithStats } from '../../model/types/types';
+import { indexedDBStorage } from '../../model/storage/indexedDB';
+import { getDueCards, getNewCards } from '../../model/services/spaced-repetition';
 
 export function useDecks() {
   const [decks, setDecks] = useState<Deck[]>([]);
   const [cards, setCards] = useState<Card[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Load initial data
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
@@ -19,7 +18,7 @@ export function useDecks() {
       setDecks(loadedDecks);
       setCards(loadedCards);
     } catch (error) {
-      console.error('Error loading data:', error);
+      console.error('Fehler beim Laden:', error);
     } finally {
       setLoading(false);
     }
@@ -29,12 +28,10 @@ export function useDecks() {
     loadData();
   }, [loadData]);
 
-  // Refresh data
   const refresh = useCallback(() => {
     loadData();
   }, [loadData]);
 
-  // Decks with statistics
   const decksWithStats = useMemo<DeckWithStats[]>(() => {
     return decks.map((deck) => {
       const deckCards = cards.filter((c) => c.deckId === deck.id);
@@ -50,7 +47,6 @@ export function useDecks() {
     });
   }, [decks, cards]);
 
-  // Deck operations
   const addDeck = async (deck: Deck) => {
     await indexedDBStorage.addDeck(deck);
     refresh();
@@ -66,7 +62,6 @@ export function useDecks() {
     refresh();
   };
 
-  // Card operations
   const addCard = async (card: Card) => {
     await indexedDBStorage.addCard(card);
     refresh();

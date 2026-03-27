@@ -18,7 +18,7 @@ export function Dashboard() {
   const [newDeckName, setNewDeckName] = useState('');
   const [newDeckDescription, setNewDeckDescription] = useState('');
 
-  // Statistics
+  // Statistiken
   const [stats, setStats] = useState({
     totalDecks: 0,
     totalCards: 0,
@@ -52,7 +52,7 @@ export function Dashboard() {
     }
   }, [decks, cards, loading]);
 
-  // Filtered decks
+  // Gefilterte Decks
   const filteredDecks = useMemo(() => {
     if (!searchQuery) return decks;
     return decks.filter((deck) =>
@@ -110,7 +110,7 @@ export function Dashboard() {
           </p>
         </div>
 
-        {/* Statistics Cards */}
+        {/* Statistik-Karten */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <Card>
             <div className="flex items-center justify-between">
@@ -153,7 +153,7 @@ export function Dashboard() {
           </Card>
         </div>
 
-        {/* Learn All Button */}
+        {/* Alle Karten lernen Button */}
         {stats.cardsToReview > 0 && (
           <div className="mb-6">
             <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-blue-200 dark:border-blue-800">
@@ -177,7 +177,7 @@ export function Dashboard() {
           </div>
         )}
 
-        {/* Search and Create */}
+        {/* Suche und Erstellen */}
         <div className="flex flex-col sm:flex-row gap-4 mb-6">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
@@ -254,7 +254,7 @@ export function Dashboard() {
         )}
       </div>
 
-      {/* Create Deck Modal */}
+      {/* Deck erstellen Modal */}
       <Modal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}

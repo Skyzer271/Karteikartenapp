@@ -140,7 +140,7 @@ export function DeckDetail() {
           </div>
         </div>
 
-        {/* Stats and Actions */}
+        {/* Statistik und Aktionen */}
         <div className="flex flex-col sm:flex-row gap-4 mb-8">
           <Card className="flex-1">
             <div className="space-y-2">
@@ -169,7 +169,7 @@ export function DeckDetail() {
           </div>
         </div>
 
-        {/* Cards List */}
+        {/* Karten-Liste */}
         {cards.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-gray-600 dark:text-gray-400 mb-4">
@@ -246,7 +246,7 @@ export function DeckDetail() {
         )}
       </div>
 
-      {/* Add Card Modal */}
+      {/* Karte hinzufügen Modal */}
       <Modal
         isOpen={isAddCardModalOpen}
         onClose={() => {
@@ -298,7 +298,7 @@ export function DeckDetail() {
         </div>
       </Modal>
 
-      {/* Edit Card Modal */}
+      {/* Karte bearbeiten Modal */}
       <Modal
         isOpen={isEditCardModalOpen}
         onClose={() => {
@@ -349,7 +349,7 @@ export function DeckDetail() {
         </div>
       </Modal>
 
-      {/* Pause Card Modal */}
+      {/* Karte pausieren Modal */}
       <Modal
         isOpen={isPauseModalOpen}
         onClose={() => {

@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router';
 import { Home, Loader2 } from 'lucide-react';
 import { Button } from '@/view/components/Button';
 
-// Zeigt Ladezustand und leitet zum Dashboard um
 export function NotFound() {
   const navigate = useNavigate();
 
+  // Automatische Weiterleitung nach 2 Sekunden
   useEffect(() => {
     const timer = setTimeout(() => {
       navigate('/', { replace: true });

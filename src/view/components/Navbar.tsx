@@ -13,7 +13,6 @@ export function Navbar() {
     <nav className="bg-card border-b border-border sticky top-0 z-30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-md">
               <span className="text-white text-xl">📚</span>
@@ -21,7 +20,6 @@ export function Navbar() {
             <span className="text-xl">FlashCards</span>
           </Link>
 
-          {/* Navigation Links */}
           <div className="flex items-center space-x-2">
             <Link
               to="/"

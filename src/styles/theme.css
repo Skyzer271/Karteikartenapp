@@ -243,6 +243,13 @@
     scroll-behavior: smooth;
   }
 
+  /* Smooth transitions for theme switching */
+  *, *::before, *::after {
+    transition-property: background-color, border-color, color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+  }
+
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
@@ -322,9 +329,9 @@
     ring-offset-color: var(--ring-offset);
   }
 
-  /* Input Base */
+  /* Input Base - mit vollständiger Transition für Theme-Wechsel */
   input, textarea, select {
-    @apply transition-colors duration-200;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
     background-color: var(--input);
     border-color: var(--input-border);
     color: var(--foreground);
